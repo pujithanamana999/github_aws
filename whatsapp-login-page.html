@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhatsApp Web Login</title>
+  <style>
+    :root {
+      --brand-green: #00a884;
+      --brand-dark: #128c7e;
+      --top-banner-bg: #00a884;
+      --body-bg: #eae6df;
+      --card-bg: #ffffff;
+      --text-primary: #111b21;
+      --text-secondary: #3b4a54;
+      --text-muted: #667781;
+      --border-color: #e9edef;
+      --link-color: #00a884;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--body-bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-header {
+      background-color: var(--top-banner-bg);
+      height: 222px;
+      padding: 24px 10%;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .header-logo svg {
+      fill: #ffffff;
+      width: 38px;
+      height: 38px;
+    }
+
+    .header-logo span {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .main-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      margin-top: -128px;
+      padding: 0 20px 48px;
+    }
+
+    .login-card {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 1000px;
+      border-radius: 4px;
+      box-shadow: 0 17px 50px 0 rgba(11, 20, 26, 0.19);
+      padding: 56px 60px;
+      display: flex;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+    .instructions-section {
+      flex: 1;
+      max-width: 520px;
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      line-height: 1.3;
+    }
+
+    .steps-list {
+      list-style: decimal;
+      padding-left: 20px;
+      display: flex;
+OBOBOBOBOBOBOBOBOBOBOBOBOBOBOBOB      flex-direction: column;
+      gap: 18px;
+OBOB      color: var(--text-secondary);
+OBOB      font-size: 18px;
+OBOB      line-height: 1.5;
+    }
+OB
+    .steps-list strong {
+OBOBOBOBOBOBOBOBOBOBOBOBOBOBOB      color: var(--text-primary);
+OBOBOB      font-weight: 500;
+OBOBOB    }
+OBOBOB
+OBOBOBOB    .action-links {
+OB      margin-top: 36px;
+    }
+
+    .text-link {
+OBOBOBOB      display: inline-block;
+OBOBOBOBOBOBOBOBOBOB      color: var(--link-color);
+      text-decoration: none;
+OBOBOBOBOBOBOBOBOBOBOBOB      font-size: 15px;
+OB      font-weight: 500;
+      cursor: pointer;
+    }
+OBOBOBOBOBOBOBOBOBOBOBOB
+    .text-link:hover {
+      text-decoration: underline;
+OBOBOBOBOBOBOB    }
+OBOB
+    .qr-section {
+      display: flex;
+OB      flex-direction: column;
+      align-items: center;
+OBOBOB      justify-content: center;
+      padding: 10px 0 10px 30px;
+    }
+OB
+    .qr-frame {
+      width: 264px;
+      height: 264px;
+      background: #ffffff;
+      padding: 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .qr-frame svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .stay-signed-in {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 24px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      user-select: none;
+      cursor: pointer;
+    }
+
+    .stay-signed-in input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--brand-green);
+      cursor: pointer;
+    }
+
+    /* Tab switcher for phone vs QR */
+    .phone-auth-container {
+      display: none;
+      margin-top: 24px;
+      width: 100%;
+    }
+
+    .phone-input-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .input-field {
+      padding: 10px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .input-field:focus {
+      border-color: var(--brand-green);
+    }
+
+    .submit-btn {
+      background-color: var(--brand-green);
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 16px;
+    }
+
+    .submit-btn:hover {
+      background-color: var(--brand-dark);
+    }
+
+    @media (max-width: 900px) {
+      .login-card {
+        flex-direction: column;
+        align-items: center;
+        padding: 32px 24px;
+      }
+
+      .qr-section {
+        padding: 24px 0 0 0;
+        border-top: 1px solid var(--border-color);
+        width: 100%;
+      }
+
+      .instructions-section {
+        max-width: 100%;
+      }
+
+      .title {
+        font-size: 22px;
+      }
+
+      .steps-list {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="top-header">
+    <a href="#" class="header-logo">
+      <svg viewBox="0 0 39 39" height="39" width="39">
+        <path d="M10.7 32.8l.6.3c2.5 1.5 5.3 2.2 8.1 2.2 8.8 0 16-7.2 16-16 0-4.2-1.7-8.3-4.7-11.3s-7-4.7-11.3-4.7c-8.8 0-16 7.2-16 16 0 3 .8 5.9 2.4 8.4l.4.6-1.6 5.9 6.1-1.4zm-2.2 2.3l1.1-4.2C7.7 28.3 6.6 25 6.6 21.3c0-7.7 6.3-14 14-14 3.7 0 7.3 1.5 9.9 4.1 2.6 2.6 4.1 6.1 4.1 9.9 0 7.7-6.3 14-14 14-3.5 0-6.8-1-9.6-3l-4.5 1.1z"/>
+      </svg>
+      <span>WhatsApp Web</span>
+    </a>
+  </header>
+
+  <main class="main-container">
+    <div class="login-card">
+      <section class="instructions-section">
+        <h2 class="title">To use WhatsApp on your computer:</h2>
+        
+        <div id="qrFlow">
+          <ol class="steps-list">
+            <li>Open WhatsApp on your phone</li>
+            <li>Tap <strong>Menu</strong> on Android, or <strong>Settings</strong> on iPhone</li>
+            <li>Tap <strong>Linked devices</strong> and then <strong>Link a device</strong></li>
+            <li>Point your phone to this screen to capture the code</li>
+          </ol>
+
+          <div class="action-links">
+            <span class="text-link" id="phoneToggle">Link with phone number instead</span>
+          </div>
+        </div>
+
+        <div id="phoneFlow" class="phone-auth-container">
+          <p style="font-size: 15px; color: var(--text-muted); margin-bottom: 12px;">
+            Enter your mobile number with your country code:
+          </p>
+          <div class="phone-input-group">
+            <input type="text" class="input-field" value="+1" style="width: 70px;" aria-label="Country Code" />
+            <input type="tel" class="input-field" placeholder="Phone number" style="flex: 1;" aria-label="Phone Number" />
+          </div>
+          <button type="button" class="submit-btn">Next</button>
+          
+          <div class="action-links" style="margin-top: 20px;">
+            <span class="text-link" id="qrToggle">Link with QR code instead</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="qr-section">
+        <div class="qr-frame">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100" height="100" fill="#ffffff" />
+            <!-- Corner marker 1 -->
+            <rect x="10" y="10" width="24" height="24" rx="3" fill="#111b21" />
+            <rect x="14" y="14" width="16" height="16" rx="2" fill="#ffffff" />
+            <rect x="18" y="18" width="8" height="8" rx="1" fill="#111b21" />
+            <!-- Corner marker 2 -->
+            <rect x="66" y="10" width="24" height="24" rx="3" fill="#111b21" />
+            <rect x="70" y="14" width="16" height="16" rx="2" fill="#ffffff" />
+            <rect x="74" y="18" width="8" height="8" rx="1" fill="#111b21" />
+            <!-- Corner marker 3 -->
+            <rect x="10" y="66" width="24" height="24" rx="3" fill="#111b21" />
+            <rect x="14" y="70" width="16" height="16" rx="2" fill="#ffffff" />
+            <rect x="18" y="74" width="8" height="8" rx="1" fill="#111b21" />
+            <!-- Data pattern blocks -->
+            <rect x="42" y="12" width="6" height="6" fill="#111b21" />
+            <rect x="52" y="18" width="6" height="6" fill="#111b21" />
+            <rect x="42" y="42" width="16" height="16" rx="2" fill="#111b21" />
+            <rect x="12" y="44" width="6" height="12" fill="#111b21" />
+            <rect x="24" y="44" width="8" height="6" fill="#111b21" />
+            <rect x="68" y="44" width="8" height="14" fill="#111b21" />
+            <rect x="82" y="52" width="6" height="14" fill="#111b21" />
+            <rect x="42" y="68" width="14" height="8" fill="#111b21" />
+            <rect x="62" y="72" width="8" height="14" fill="#111b21" />
+            <rect x="76" y="74" width="12" height="12" fill="#111b21" />
+          </svg>
+        </div>
+
+        <label class="stay-signed-in">
+          <input type="checkbox" checked />
+          Stay signed in
+        </label>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const qrFlow = document.getElementById('qrFlow');
+    const phoneFlow = document.getElementById('phoneFlow');
+    const phoneToggle = document.getElementById('phoneToggle');
+    const qrToggle = document.getElementById('qrToggle');
+
+    phoneToggle.addEventListener('click', () => {
+      qrFlow.style.display = 'none';
+      phoneFlow.style.display = 'block';
+    });
+
+    qrToggle.addEventListener('click', () => {
+      phoneFlow.style.display = 'none';
+      qrFlow.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
