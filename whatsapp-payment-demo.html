@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WhatsApp Payment Demo</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        background: #d9dbd5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .phone {
+        width: 390px;
+        height: 750px;
+        background: #f0f2f5;
+        border-radius: 25px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+        position: relative;
+    }
+
+    /* Header */
+    .header {
+        height: 65px;
+        background: #075e54;
+        color: white;
+        display: flex;
+        align-items: center;
+        padding: 10px 15px;
+        gap: 15px;
+    }
+
+    .back {
+        font-size: 25px;
+        cursor: pointer;
+    }
+
+    .profile {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #ddd;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #555;
+        font-size: 20px;
+    }
+
+    .name {
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+    /* Payment section */
+    .payment {
+        padding: 25px 20px;
+        text-align: center;
+    }
+
+    .payment-icon {
+        width: 75px;
+        height: 75px;
+        border-radius: 50%;
+        background: #25d366;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 10px auto 15px;
+        font-size: 35px;
+    }
+
+    h2 {
+        color: #222;
+        margin-bottom: 8px;
+    }
+
+    .subtitle {
+        color: #667781;
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+
+    /* Amount */
+    .amount-box {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 15px;
+    }
+
+    .amount-box label {
+        display: block;
+        color: #667781;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .amount-input {
+        border: none;
+        outline: none;
+        width: 100%;
+        text-align: center;
+        font-size: 35px;
+        font-weight: bold;
+        color: #075e54;
+    }
+
+    /* UPI */
+    .upi-box {
+        background: white;
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    .upi-title {
+        font-size: 14px;
+        color: #667781;
+        margin-bottom: 8px;
+    }
+
+    .upi-input {
+        width: 100%;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 12px;
+        outline: none;
+        font-size: 15px;
+    }
+
+    /* Pay button */
+    .pay-btn {
+        width: 100%;
+        border: none;
+        background: #25d366;
+        color: white;
+        padding: 14px;
+        border-radius: 25px;
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .pay-btn:hover {
+        background: #20bd5a;
+    }
+
+    /* Security text */
+    .secure {
+        margin-top: 20px;
+        color: #667781;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    /* Success popup */
+    .success {
+        display: none;
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,0.55);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .success-card {
+        width: 85%;
+        background: white;
+        border-radius: 18px;
+        padding: 30px 20px;
+        text-align: center;
+    }
+
+    .success-icon {
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        background: #25d366;
+        color: white;
+        font-size: 35px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+    }
+
+    .success-card h3 {
+        margin-top: 15px;
+        color: #222;
+    }
+
+    .success-card p {
+        margin-top: 8px;
+        color: #667781;
+        font-size: 14px;
+    }
+
+    .close-btn {
+        margin-top: 20px;
+        padding: 10px 30px;
+        border: none;
+        border-radius: 20px;
+        background: #075e54;
+        color: white;
+        cursor: pointer;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="phone">
+
+    <!-- Header -->
+    <div class="header">
+        <div class="back" onclick="goBack()">‹</div>
+
+        <div class="profile">
+            👤
+        </div>
+
+        <div>
+            <div class="name">Rahul</div>
+            <small>Payment</small>
+        </div>
+    </div>
+
+    <!-- Payment -->
+    <div class="payment">
+
+        <div class="payment-icon">
+            ₹
+        </div>
+
+        <h2>Send Payment</h2>
+
+        <p class="subtitle">
+            Send money securely to Rahul
+        </p>
+
+        <!-- Amount -->
+        <div class="amount-box">
+
+            <label>Enter Amount</label>
+
+            <input
+                type="number"
+                id="amount"
+                class="amount-input"
+                placeholder="₹ 0"
+                min="1"
+            >
+
+        </div>
+
+        <!-- UPI -->
+        <div class="upi-box">
+
+            <div class="upi-title">
+                UPI ID
+            </div>
+
+            <input
+                type="text"
+                id="upi"
+                class="upi-input"
+                placeholder="example@upi"
+            >
+
+        </div>
+
+        <button class="pay-btn" onclick="makePayment()">
+            Pay Securely
+        </button>
+
+        <p class="secure">
+            🔒 Demo payment screen<br>
+            No real money will be transferred.
+        </p>
+
+    </div>
+
+    <!-- Success -->
+    <div class="success" id="success">
+
+        <div class="success-card">
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+            <h3>Payment Successful</h3>
+
+            <p id="successText">
+                Your payment was completed successfully.
+            </p>
+
+            <button class="close-btn" onclick="closeSuccess()">
+                Done
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function makePayment() {
+
+    let amount = document.getElementById("amount").value;
+    let upi = document.getElementById("upi").value;
+
+    if (amount === "" || amount <= 0) {
+        alert("Please enter a valid amount.");
+        return;
+    }
+
+    if (upi.trim() === "") {
+        alert("Please enter UPI ID.");
+        return;
+    }
+
+    document.getElementById("successText").innerText =
+        "₹" + amount + " payment sent to Rahul successfully. (Demo only)";
+
+    document.getElementById("success").style.display = "flex";
+}
+
+function closeSuccess() {
+    document.getElementById("success").style.display = "none";
+}
+
+function goBack() {
+    alert("Back button clicked");
+}
+
+</script>
+
+</body>
+</html>
