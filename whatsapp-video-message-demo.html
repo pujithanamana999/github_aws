@@ -1,0 +1,368 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Video Message</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #d9dbd5;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chat {
+            width: 420px;
+            height: 650px;
+            background: #efeae2;
+            display: flex;
+            flex-direction: column;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Header */
+        .header {
+            height: 65px;
+            background: #075e54;
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+        }
+
+        .profile {
+            width: 45px;
+            height: 45px;
+            background: #ddd;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 12px;
+            font-size: 20px;
+        }
+
+        .user-info h3 {
+            font-size: 16px;
+        }
+
+        .user-info p {
+            font-size: 12px;
+            margin-top: 3px;
+            color: #d8f8f5;
+        }
+
+        /* Messages */
+        .messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .message {
+            width: 290px;
+            background: #d9fdd3;
+            margin-left: auto;
+            padding: 7px;
+            border-radius: 8px;
+        }
+
+        /* Video */
+        .video-container {
+            position: relative;
+            width: 100%;
+            border-radius: 7px;
+            overflow: hidden;
+            background: #111;
+        }
+
+        video {
+            width: 100%;
+            height: 230px;
+            display: block;
+            object-fit: cover;
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            width: 55px;
+            height: 55px;
+
+            border: none;
+            border-radius: 50%;
+
+            background: rgba(0,0,0,0.65);
+            color: white;
+
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .play-overlay:hover {
+            background: rgba(37,211,102,0.9);
+        }
+
+        .time {
+            text-align: right;
+            font-size: 10px;
+            color: #667781;
+            padding: 5px 5px 2px;
+        }
+
+        /* Bottom */
+        .controls {
+            background: #f0f2f5;
+            padding: 15px;
+
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .control-btn {
+            width: 55px;
+            height: 55px;
+
+            border: none;
+            border-radius: 50%;
+
+            color: white;
+            font-size: 22px;
+
+            cursor: pointer;
+        }
+
+        .camera-btn {
+            background: #25d366;
+        }
+
+        .stop-btn {
+            background: #e53935;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .status {
+            text-align: center;
+            background: #f0f2f5;
+            color: #667781;
+            font-size: 12px;
+            padding-bottom: 10px;
+        }
+
+        @media (max-width: 500px) {
+            .chat {
+                width: 100%;
+                height: 100vh;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="chat">
+
+    <!-- Header -->
+    <div class="header">
+
+        <div class="profile">
+            👤
+        </div>
+
+        <div class="user-info">
+            <h3>Friend</h3>
+            <p>online</p>
+        </div>
+
+    </div>
+
+
+    <!-- Messages -->
+    <div class="messages" id="messages">
+
+        <div class="message">
+
+            <div class="video-container">
+
+                <!-- Demo video -->
+                <video id="videoPlayer" controls>
+                    <source
+                        src="https://www.w3schools.com/html/mov_bbb.mp4"
+                        type="video/mp4">
+                    Your browser does not support video.
+                </video>
+
+                <button
+                    class="play-overlay"
+                    onclick="toggleVideo()"
+                    id="playButton">
+                    ▶
+                </button>
+
+            </div>
+
+            <div class="time">
+                4:30 PM ✓✓
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Controls -->
+    <div class="controls">
+
+        <button
+            class="control-btn camera-btn"
+            onclick="startCamera()">
+            📹
+        </button>
+
+        <button
+            class="control-btn stop-btn"
+            onclick="stopCamera()">
+            ⏹
+        </button>
+
+    </div>
+
+    <div class="status" id="status">
+        Tap 📹 to open camera
+    </div>
+
+</div>
+
+
+<script>
+
+    const video = document.getElementById("videoPlayer");
+    const playButton = document.getElementById("playButton");
+    const status = document.getElementById("status");
+
+    let cameraStream = null;
+
+
+    /* Play / Pause video */
+
+    function toggleVideo() {
+
+        if (video.paused) {
+
+            video.play();
+
+            playButton.innerHTML = "❚❚";
+
+        } else {
+
+            video.pause();
+
+            playButton.innerHTML = "▶";
+
+        }
+
+    }
+
+
+    /* Camera */
+
+    async function startCamera() {
+
+        try {
+
+            cameraStream =
+                await navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: true
+                });
+
+            video.srcObject = cameraStream;
+
+            video.controls = true;
+
+            video.play();
+
+            status.innerText =
+                "Camera is active";
+
+        }
+
+        catch (error) {
+
+            status.innerText =
+                "Camera permission denied.";
+
+        }
+
+    }
+
+
+    /* Stop camera */
+
+    function stopCamera() {
+
+        if (cameraStream) {
+
+            cameraStream.getTracks().forEach(track => {
+                track.stop();
+            });
+
+            video.srcObject = null;
+
+            status.innerText =
+                "Camera stopped.";
+
+        }
+
+    }
+
+
+    /* Change play button when video ends */
+
+    video.addEventListener("ended", function() {
+
+        playButton.innerHTML = "▶";
+
+    });
+
+
+    video.addEventListener("play", function() {
+
+        playButton.innerHTML = "❚❚";
+
+    });
+
+
+    video.addEventListener("pause", function() {
+
+        playButton.innerHTML = "▶";
+
+    });
+
+</script>
+
+</body>
+</html>
+```
+
